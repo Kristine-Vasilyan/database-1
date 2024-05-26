@@ -1,0 +1,38 @@
+Class Customer{
+	attribute Struct FNam {string Name, string Surname, string Fathername} FullName;
+	attribute date BDate;
+	relationship Set<Passport> cus_pass
+		inverse Passport::pass_cus;
+}
+Class Passport
+ (exten Passport key Number)
+{
+	attribute string Number;
+	attribute date S_date;
+	attribute date E_date;
+	relationship Customer pass_cus
+		inverse Customer::cus_pass;
+	relationship Set<Trip> pass_rip
+		inverse Trip::trip_pass;
+}
+Class Visa
+ (exten Visa key (Country,Type))
+{
+	attribute string Country;
+	attribute string Type;
+	attribute float Price;
+	relationship Set<Trip> visa_trip
+		inverse Trip::trip_visa;
+}
+Class Trip
+ (exten Trip key (trip_visa,Dep_date))
+{
+	attribute date Dep_date;
+	attribute float Day_price;
+	attribute int Day_count;
+	attribute float Transport_price;
+	relationship Passport trip_pass
+		inverse Passport::pass_trip;
+	relationship Visa trip_visa
+		inverse Visa::visa_trip;
+}
